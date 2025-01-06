@@ -17,37 +17,40 @@ export default function TableHeader({ onSort, sortConfig }: TableHeaderProps) {
   return (
     <thead className="bg-gray-50">
       <tr>
-        <th 
+        <th
           onClick={() => onSort('time')}
           className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
         >
           Date {getSortIcon('time')}
         </th>
-        <th 
+        <th
           onClick={() => onSort('gameId')}
           className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
         >
           Game ID {getSortIcon('gameId')}
         </th>
-        <th 
+        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          Currency
+        </th>
+        <th
           onClick={() => onSort('stake')}
           className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
         >
           Stake {getSortIcon('stake')}
         </th>
-        <th 
+        <th
           onClick={() => onSort('payout')}
           className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
         >
           Payout {getSortIcon('payout')}
         </th>
-        <th 
+        <th
           onClick={() => onSort('winloss')}
           className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
         >
           Win/Loss {getSortIcon('winloss')}
         </th>
-        <th 
+        <th
           onClick={() => onSort('tickets')}
           className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
         >
@@ -56,4 +59,4 @@ export default function TableHeader({ onSort, sortConfig }: TableHeaderProps) {
       </tr>
     </thead>
   );
-} 
+}
