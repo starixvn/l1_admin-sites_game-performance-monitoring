@@ -23,7 +23,7 @@ const gameConfigSchema = new Schema<GameConfig>(
 
 export function getGameConfigModel() {
   const db = useDB('minigame');
-  // Check if model already exists to prevent recompilation
+
   return (
     db.models.GameConfig || db.model<GameConfig>('GameConfig', gameConfigSchema)
   );

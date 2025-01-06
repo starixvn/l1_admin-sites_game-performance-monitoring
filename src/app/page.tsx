@@ -17,7 +17,7 @@ async function getData() {
       .exec();
 
     // Get unique game IDs
-    const gameIds = [...new Set(summaries.map((s) => s.gameId))];
+    const gameIds = Array.from(new Set(summaries.map((s) => s.gameId)));
     const gameNames = await getGameNames(gameIds);
 
     // Add game names to summaries
@@ -84,12 +84,12 @@ async function getTopGames() {
     ]);
 
     // Get game names after we have the data
-    const gameIds = [
-      ...new Set([
+    const gameIds = Array.from(
+      new Set([
         ...topProfits.map((g) => g.gameId),
         ...topLosses.map((g) => g.gameId),
-      ]),
-    ];
+      ])
+    );
 
     const gameNames = await getGameNames(gameIds);
 
