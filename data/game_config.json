@@ -1,0 +1,15 @@
+{
+  "displayName": "7 Up 7 Down",
+  "enabled": true,
+  "gameId": 103,
+  "maxbet": 2000,
+  "maxWinPerRound": 25,
+  "minbet": 1,
+  "name": "sevenupdown",
+  "odds": {
+    "down": 2,
+    "seven": 5,
+    "up": 2
+  },
+  "type": 1
+}
