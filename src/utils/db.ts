@@ -26,15 +26,12 @@ export async function connectDB() {
 
   if (!cached.promise) {
     const opts = {
-      dbName: 'summary',
       maxPoolSize: 10,
       bufferCommands: false,
+      dbName: 'summary',
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
-      console.log('Connected to MongoDB - summary database');
-      return mongoose;
-    });
+    cached.promise = mongoose.connect(MONGODB_URI, opts).then(() => mongoose);
   }
 
   try {
@@ -45,4 +42,8 @@ export async function connectDB() {
   }
 
   return cached.conn;
+}
+
+export function useDB(dbName: string) {
+  return mongoose.connection.useDb(dbName, { useCache: true });
 }

@@ -1,10 +1,11 @@
 import { Suspense } from 'react';
-import { connectDB } from '../utils/db';
-import { DailySummary } from '../models/DailySummary';
-import SummaryTable from '../components/SummaryTable/Table';
-import Loading from '../components/UI/Loading';
-import Error from '../components/UI/Error';
-import TopGamesCard from '../components/TopGames/TopGamesCard';
+import { connectDB } from '@/utils/db';
+import { DailySummary } from '@/models/DailySummary';
+import { getGameConfigModel } from '@/models/GameConfig';
+import SummaryTable from '@/components/SummaryTable/Table';
+import TopGamesCard from '@/components/TopGames/TopGamesCard';
+import Loading from '@/components/UI/Loading';
+import Error from '@/components/UI/Error';
 
 async function getData() {
   try {
@@ -15,26 +16,65 @@ async function getData() {
       .lean()
       .exec();
 
+    // Get unique game IDs
+    const gameIds = [...new Set(summaries.map((s) => s.gameId))];
+    const gameNames = await getGameNames(gameIds);
+
+    // Add game names to summaries
+    const enrichedSummaries = summaries.map((summary) => ({
+      ...summary,
+      gameName: gameNames[summary.gameId] || `Game ${summary.gameId}`,
+    }));
+
     // Ensure the data is serializable
-    return JSON.parse(JSON.stringify(summaries));
+    return JSON.parse(JSON.stringify(enrichedSummaries));
   } catch (error) {
     console.error('Error fetching data:', error);
     return [];
   }
 }
 
+async function getGameNames(gameIds: string[]) {
+  try {
+    // Ensure we're connected first
+    await connectDB();
+
+    // Only get the model and query after connection is established
+    const GameConfig = getGameConfigModel();
+
+    const games = await GameConfig.find({
+      gameId: { $in: gameIds },
+    })
+      .select('gameId displayName name')
+      .lean()
+      .exec();
+
+    return games.reduce(
+      (acc, game) => {
+        acc[game.gameId] = game.displayName || game.name;
+        return acc;
+      },
+      {} as Record<string, string>
+    );
+  } catch (error) {
+    console.error('Error fetching game names:', error);
+    return {};
+  }
+}
+
 async function getTopGames() {
   try {
+    // Ensure connection first
     await connectDB();
+
+    // Then get data
     const [topProfits, topLosses] = await Promise.all([
-      // Top 5 profits
       DailySummary.find()
         .sort({ winloss: -1 })
         .limit(5)
         .select('gameId winloss currency')
         .lean()
         .exec(),
-      // Top 5 losses
       DailySummary.find()
         .sort({ winloss: 1 })
         .limit(5)
@@ -43,9 +83,29 @@ async function getTopGames() {
         .exec(),
     ]);
 
+    // Get game names after we have the data
+    const gameIds = [
+      ...new Set([
+        ...topProfits.map((g) => g.gameId),
+        ...topLosses.map((g) => g.gameId),
+      ]),
+    ];
+
+    const gameNames = await getGameNames(gameIds);
+
+    const profits = topProfits.map((game) => ({
+      ...game,
+      gameName: gameNames[game.gameId] || `Game ${game.gameId}`,
+    }));
+
+    const losses = topLosses.map((game) => ({
+      ...game,
+      gameName: gameNames[game.gameId] || `Game ${game.gameId}`,
+    }));
+
     return {
-      profits: JSON.parse(JSON.stringify(topProfits)),
-      losses: JSON.parse(JSON.stringify(topLosses)),
+      profits: JSON.parse(JSON.stringify(profits)),
+      losses: JSON.parse(JSON.stringify(losses)),
     };
   } catch (error) {
     console.error('Error fetching top games:', error);

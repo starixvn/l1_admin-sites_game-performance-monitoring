@@ -1,7 +1,7 @@
 import { DailySummary } from '@/models/DailySummary';
 
 interface TableRowProps {
-  summary: DailySummary;
+  summary: DailySummary & { gameName: string };
 }
 
 export default function TableRow({ summary }: TableRowProps) {
@@ -16,7 +16,7 @@ export default function TableRow({ summary }: TableRowProps) {
         {formatDate(summary.time)}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-        {summary.gameId}
+        {summary.gameName}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
         {summary.currency}

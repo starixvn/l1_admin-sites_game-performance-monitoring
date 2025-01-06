@@ -1,5 +1,6 @@
 interface TopGame {
   gameId: string;
+  gameName: string;
   winloss: number;
   currency: string;
 }
@@ -35,7 +36,7 @@ export default function TopGamesCard({
             <span
               className={`font-medium ${isProfit ? 'text-green-800' : 'text-red-800'}`}
             >
-              Game {game.gameId}
+              {game.gameName}
             </span>
             <span
               className={`font-bold ${isProfit ? 'text-green-600' : 'text-red-600'}`}
