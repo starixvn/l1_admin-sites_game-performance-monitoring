@@ -149,4 +149,30 @@ export abstract class SummaryService implements BaseSummaryService {
       gameName: gameNames[game.gameId] || `Game ${game.gameId}`,
     }));
   }
+
+  async getTopPlayers(query = {}) {
+    try {
+      await connectDB();
+      const topPlayers = await this.getModel()
+        .aggregate([
+          { $match: { ...query, 'USD.win': { $gt: 0 } } },
+          {
+            $group: {
+              _id: '$playerId',
+              playerId: { $first: '$playerId' },
+              stake: { $sum: '$USD.stake' },
+              win: { $sum: '$USD.win' },
+            },
+          },
+          { $sort: { win: -1 } },
+          { $limit: 10 },
+        ])
+        .exec();
+
+      return topPlayers.length ? JSON.parse(JSON.stringify(topPlayers)) : [];
+    } catch (error) {
+      console.error('Error fetching top players:', error);
+      return [];
+    }
+  }
 }

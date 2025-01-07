@@ -1,0 +1,35 @@
+{
+  "currency": "$US",
+  "gameId": 69,
+  "loss": -31.2,
+  "operatorId": "ONEworks1",
+  "payout": 125.8,
+  "playerId": "1005",
+  "refund": 0,
+  "roundIds": [14077, 14078],
+  "rounds": 6,
+  "siteId": "",
+  "stake": 60,
+  "tickets": 6,
+  "time": {
+    "$date": "2024-12-31T00:00:00.000Z"
+  },
+  "USD": {
+    "loss": -31.2,
+    "payout": 125.8,
+    "refund": 0,
+    "stake": 60,
+    "win": 97,
+    "winloss": 65.8
+  },
+  "VND": {
+    "loss": -787004.4,
+    "payout": 3173242.1,
+    "refund": 0,
+    "stake": 1513470,
+    "win": 2446776.5,
+    "winloss": 1659772.1
+  },
+  "win": 97,
+  "winloss": 65.8
+}

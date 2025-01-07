@@ -1,13 +1,22 @@
 import { Suspense } from 'react';
 import PageLayout from '@/components/Layout/PageLayout';
-import { getData, getTopGames } from '@/features/summary/services/dailySummary';
+import {
+  getData,
+  getTopGames,
+  getTopPlayers,
+} from '@/features/summary/services/dailySummary';
 import SummaryTable from '@/features/summary/summary-list/Table';
 import TopGamesCard from '@/features/summary/summary-top-game/TopGamesCard';
 import Loading from '@/components/UI/Loading';
 import Error from '@/components/UI/Error';
+import TopPlayersCard from '@/features/summary/summary-top-players/TopPlayersCard';
 
 export default async function DailySummary() {
-  const [data, topGames] = await Promise.all([getData(), getTopGames()]);
+  const [data, topGames, topPlayers] = await Promise.all([
+    getData(),
+    getTopGames(),
+    getTopPlayers(),
+  ]);
 
   // Calculate totals for current date
   const totals = data.reduce(
@@ -63,6 +72,7 @@ export default async function DailySummary() {
           games={topGames.losses}
           isProfit={false}
         />
+        <TopPlayersCard players={topPlayers} />
       </div>
 
       <div className="bg-white rounded-lg shadow">
