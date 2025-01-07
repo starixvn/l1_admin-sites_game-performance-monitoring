@@ -13,11 +13,12 @@ export default function SummaryTable({ initialData }: SummaryTableProps) {
   const [data, setData] = useState(initialData);
   const [sortConfig, setSortConfig] = useState({
     key: 'time',
-    direction: 'desc'
+    direction: 'desc',
   });
 
   const handleSort = async (key: string) => {
-    const direction = sortConfig.key === key && sortConfig.direction === 'asc' ? 'desc' : 'asc';
+    const direction =
+      sortConfig.key === key && sortConfig.direction === 'asc' ? 'desc' : 'asc';
     setSortConfig({ key, direction });
 
     const res = await fetch(`/api/summaries?sortBy=${key}&order=${direction}`);
@@ -31,10 +32,10 @@ export default function SummaryTable({ initialData }: SummaryTableProps) {
         <TableHeader onSort={handleSort} sortConfig={sortConfig} />
         <tbody>
           {data.map((summary) => (
-            <TableRow key={summary._id} summary={summary} />
+            <TableRow key={summary.gameId} summary={summary} />
           ))}
         </tbody>
       </table>
     </div>
   );
-} 
+}

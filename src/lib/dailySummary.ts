@@ -16,6 +16,7 @@ export async function getData() {
 
     const enrichedSummaries = summaries.map((summary) => ({
       ...summary,
+      winloss: -1 * summary.winloss,
       gameName: gameNames[summary.gameId] || `Game ${summary.gameId}`,
     }));
 
@@ -31,13 +32,13 @@ export async function getTopGames() {
     await connectDB();
     const [topProfits, topLosses] = await Promise.all([
       DailySummary.find()
-        .sort({ winloss: -1 })
+        .sort({ winloss: 1 })
         .limit(5)
         .select('gameId winloss currency')
         .lean()
         .exec(),
       DailySummary.find()
-        .sort({ winloss: 1 })
+        .sort({ winloss: -1 })
         .limit(5)
         .select('gameId winloss currency')
         .lean()
@@ -50,16 +51,17 @@ export async function getTopGames() {
         ...topLosses.map((g) => g.gameId),
       ]),
     ];
-
     const gameNames = await getGameNames(gameIds);
 
     const profits = topProfits.map((game) => ({
       ...game,
+      winloss: -1 * game.winloss,
       gameName: gameNames[game.gameId] || `Game ${game.gameId}`,
     }));
 
     const losses = topLosses.map((game) => ({
       ...game,
+      winloss: -1 * game.winloss,
       gameName: gameNames[game.gameId] || `Game ${game.gameId}`,
     }));
 

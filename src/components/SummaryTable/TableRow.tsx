@@ -10,6 +10,9 @@ export default function TableRow({ summary }: TableRowProps) {
     return new Date(date).toISOString().split('T')[0];
   };
 
+  // Convert winloss to game provider view
+  const providerWinloss = -1 * summary.winloss;
+
   return (
     <tr className="hover:bg-gray-50">
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -28,9 +31,9 @@ export default function TableRow({ summary }: TableRowProps) {
         {summary.payout.toLocaleString()}
       </td>
       <td
-        className={`px-6 py-4 whitespace-nowrap text-sm ${summary.winloss >= 0 ? 'text-green-600' : 'text-red-600'}`}
+        className={`px-6 py-4 whitespace-nowrap text-sm ${providerWinloss >= 0 ? 'text-green-600' : 'text-red-600'}`}
       >
-        {summary.winloss.toLocaleString()}
+        {providerWinloss.toLocaleString()}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
         {summary.tickets}
