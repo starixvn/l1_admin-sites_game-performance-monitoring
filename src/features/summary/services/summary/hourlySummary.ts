@@ -1,11 +1,11 @@
 import { connectDB } from '@/utils/db';
-import { DailySummary } from '@/models/DailySummary';
-import { getGameConfigModel } from '@/models/GameConfig';
+import { HourlySummary } from '@/features/summary/models/HourlySummary';
+import { getGameConfigModel } from '@/features/gameConfig/models/GameConfig';
 
 export async function getData() {
   try {
     await connectDB();
-    const summaries = await DailySummary.find()
+    const summaries = await HourlySummary.find()
       .sort({ time: -1 })
       .limit(100)
       .lean()
@@ -31,13 +31,13 @@ export async function getTopGames() {
   try {
     await connectDB();
     const [topProfits, topLosses] = await Promise.all([
-      DailySummary.find()
+      HourlySummary.find()
         .sort({ winloss: 1 })
         .limit(5)
         .select('gameId winloss currency')
         .lean()
         .exec(),
-      DailySummary.find()
+      HourlySummary.find()
         .sort({ winloss: -1 })
         .limit(5)
         .select('gameId winloss currency')

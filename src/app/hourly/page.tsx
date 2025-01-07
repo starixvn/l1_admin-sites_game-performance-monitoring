@@ -1,6 +1,9 @@
 import { Suspense } from 'react';
 import PageLayout from '@/components/Layout/PageLayout';
-import { getData, getTopGames } from '@/lib/hourlySummary';
+import {
+  getData,
+  getTopGames,
+} from '@/features/summary/services/summary/hourlySummary';
 import SummaryTable from '@/components/SummaryTable/Table';
 import TopGamesCard from '@/components/TopGames/TopGamesCard';
 import Loading from '@/components/UI/Loading';
