@@ -9,13 +9,26 @@ export abstract class SummaryService implements BaseSummaryService {
     try {
       await connectDB();
       const summaries = await this.getModel()
-        .find(query)
-        .sort({ time: -1 })
-        .limit(100)
-        .lean()
+        .aggregate([
+          { $match: query },
+          {
+            $group: {
+              _id: '$gameId',
+              time: { $first: '$time' },
+              gameId: { $first: '$gameId' },
+              stake: { $sum: '$USD.stake' },
+              payout: { $sum: '$USD.payout' },
+              winloss: { $sum: '$USD.winloss' },
+              currency: { $first: 'USD' },
+              tickets: { $sum: '$tickets' },
+            },
+          },
+          { $sort: { time: -1 } },
+          { $limit: 100 },
+        ])
         .exec();
 
-      const gameIds = [...new Set(summaries.map((s) => s.gameId))];
+      const gameIds = summaries.map((s) => s.gameId);
       const gameNames = await this.getGameNames(gameIds);
 
       const enrichedSummaries = summaries.map((summary) => ({
@@ -36,18 +49,36 @@ export abstract class SummaryService implements BaseSummaryService {
       await connectDB();
       const [topProfits, topLosses] = await Promise.all([
         this.getModel()
-          .find(query)
-          .sort({ winloss: 1 })
-          .limit(5)
-          .select('gameId winloss currency')
-          .lean()
+          .aggregate([
+            { $match: { ...query, 'USD.winloss': { $lt: 0 } } },
+            {
+              $group: {
+                _id: '$gameId',
+                gameId: { $first: '$gameId' },
+                winloss: { $sum: '$USD.winloss' },
+                currency: { $first: 'USD' },
+                time: { $first: '$time' },
+              },
+            },
+            { $sort: { winloss: 1 } },
+            { $limit: 5 },
+          ])
           .exec(),
         this.getModel()
-          .find(query)
-          .sort({ winloss: -1 })
-          .limit(5)
-          .select('gameId winloss currency')
-          .lean()
+          .aggregate([
+            { $match: { ...query, 'USD.winloss': { $gt: 0 } } },
+            {
+              $group: {
+                _id: '$gameId',
+                gameId: { $first: '$gameId' },
+                winloss: { $sum: '$USD.winloss' },
+                currency: { $first: 'USD' },
+                time: { $first: '$time' },
+              },
+            },
+            { $sort: { winloss: -1 } },
+            { $limit: 5 },
+          ])
           .exec(),
       ]);
 
@@ -57,14 +88,24 @@ export abstract class SummaryService implements BaseSummaryService {
           ...topLosses.map((g) => g.gameId),
         ]),
       ];
+
       const gameNames = await this.getGameNames(gameIds);
 
-      const profits = this.enrichSummaries(topProfits, gameNames);
-      const losses = this.enrichSummaries(topLosses, gameNames);
+      const profits = topProfits.map((game) => ({
+        ...game,
+        winloss: -1 * game.winloss,
+        gameName: gameNames[game.gameId] || `Game ${game.gameId}`,
+      }));
+
+      const losses = topLosses.map((game) => ({
+        ...game,
+        winloss: -1 * game.winloss,
+        gameName: gameNames[game.gameId] || `Game ${game.gameId}`,
+      }));
 
       return {
-        profits: JSON.parse(JSON.stringify(profits)),
-        losses: JSON.parse(JSON.stringify(losses)),
+        profits: profits.length ? JSON.parse(JSON.stringify(profits)) : [],
+        losses: losses.length ? JSON.parse(JSON.stringify(losses)) : [],
       };
     } catch (error) {
       console.error('Error fetching top games:', error);
