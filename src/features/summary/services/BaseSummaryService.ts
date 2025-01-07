@@ -5,11 +5,11 @@ import { BaseSummaryService, GameSummary, TopGamesResult } from './types';
 export abstract class SummaryService implements BaseSummaryService {
   protected abstract getModel(): any;
 
-  async getData(): Promise<GameSummary[]> {
+  async getData(query = {}) {
     try {
       await connectDB();
       const summaries = await this.getModel()
-        .find()
+        .find(query)
         .sort({ time: -1 })
         .limit(100)
         .lean()
@@ -31,19 +31,19 @@ export abstract class SummaryService implements BaseSummaryService {
     }
   }
 
-  async getTopGames(): Promise<TopGamesResult> {
+  async getTopGames(query = {}) {
     try {
       await connectDB();
       const [topProfits, topLosses] = await Promise.all([
         this.getModel()
-          .find()
+          .find(query)
           .sort({ winloss: 1 })
           .limit(5)
           .select('gameId winloss currency')
           .lean()
           .exec(),
         this.getModel()
-          .find()
+          .find(query)
           .sort({ winloss: -1 })
           .limit(5)
           .select('gameId winloss currency')

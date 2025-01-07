@@ -6,10 +6,14 @@ import TableRow from './TableRow';
 import type { DailySummary } from '@/features/summary/models/DailySummary';
 
 interface SummaryTableProps {
-  initialData: DailySummary[];
+  initialData: any[];
+  showHour?: boolean;
 }
 
-export default function SummaryTable({ initialData }: SummaryTableProps) {
+export default function SummaryTable({
+  initialData,
+  showHour,
+}: SummaryTableProps) {
   const [data, setData] = useState(initialData);
   const [sortConfig, setSortConfig] = useState({
     key: 'time',
@@ -31,8 +35,8 @@ export default function SummaryTable({ initialData }: SummaryTableProps) {
       <table className="min-w-full bg-white">
         <TableHeader onSort={handleSort} sortConfig={sortConfig} />
         <tbody>
-          {data.map((summary) => (
-            <TableRow key={summary.gameId} summary={summary} />
+          {data.map((summary, index) => (
+            <TableRow key={index} summary={summary} showHour={showHour} />
           ))}
         </tbody>
       </table>

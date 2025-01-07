@@ -31,7 +31,7 @@ export default async function HourlySummary() {
         <div className="px-4 py-5 sm:p-6">
           <Suspense fallback={<Loading />}>
             {data.length > 0 ? (
-              <SummaryTable initialData={data} />
+              <SummaryTable initialData={data} showHour={true} />
             ) : (
               <Error message="Failed to load data" />
             )}

@@ -1,17 +1,26 @@
 import { DailySummary } from '@/features/summary/models/DailySummary';
 
 interface TableRowProps {
-  summary: DailySummary & { gameName: string };
+  summary: {
+    time: string;
+    gameName: string;
+    currency: string;
+    stake: number;
+    payout: number;
+    winloss: number;
+    tickets: number;
+  };
+  showHour?: boolean;
 }
 
-export default function TableRow({ summary }: TableRowProps) {
-  // Format date to YYYY-MM-DD
-  const formatDate = (date: Date) => {
-    return new Date(date).toISOString().split('T')[0];
+export default function TableRow({ summary, showHour }: TableRowProps) {
+  // Format date to YYYY-MM-DD or YYYY-MM-DD HH:00 if showHour is true
+  const formatDate = (date: string) => {
+    const d = new Date(date);
+    return showHour
+      ? d.toISOString().split('.')[0].replace('T', ' ').slice(0, -3)
+      : d.toISOString().split('T')[0];
   };
-
-  // Convert winloss to game provider view
-  const providerWinloss = -1 * summary.winloss;
 
   return (
     <tr className="hover:bg-gray-50">
@@ -31,9 +40,9 @@ export default function TableRow({ summary }: TableRowProps) {
         {summary.payout.toLocaleString()}
       </td>
       <td
-        className={`px-6 py-4 whitespace-nowrap text-sm ${providerWinloss >= 0 ? 'text-green-600' : 'text-red-600'}`}
+        className={`px-6 py-4 whitespace-nowrap text-sm ${summary.winloss >= 0 ? 'text-green-600' : 'text-red-600'}`}
       >
-        {providerWinloss.toLocaleString()}
+        {summary.winloss.toLocaleString()}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
         {summary.tickets}
