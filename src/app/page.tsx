@@ -1,11 +1,8 @@
 import { Suspense } from 'react';
 import PageLayout from '@/components/Layout/PageLayout';
-import {
-  getData,
-  getTopGames,
-} from '@/features/summary/services/summary/dailySummary';
-import SummaryTable from '@/features/summary/summary-list/SummaryTable/Table';
-import TopGamesCard from '@/features/summary/summary-top-game/TopGames/TopGamesCard';
+import { getData, getTopGames } from '@/features/summary/services/dailySummary';
+import SummaryTable from '@/features/summary/summary-list/Table';
+import TopGamesCard from '@/features/summary/summary-top-game/TopGamesCard';
 import Loading from '@/components/UI/Loading';
 import Error from '@/components/UI/Error';
 
