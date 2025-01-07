@@ -1,4 +1,4 @@
-import { DailySummary } from '@/models/DailySummary';
+import { DailySummary } from '@/features/summary/models/DailySummary';
 
 interface TableRowProps {
   summary: DailySummary & { gameName: string };

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import TableHeader from './TableHeader';
 import TableRow from './TableRow';
-import type { DailySummary } from '@/models/DailySummary';
+import type { DailySummary } from '@/features/summary/models/DailySummary';
 
 interface SummaryTableProps {
   initialData: DailySummary[];

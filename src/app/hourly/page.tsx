@@ -4,8 +4,8 @@ import {
   getData,
   getTopGames,
 } from '@/features/summary/services/summary/hourlySummary';
-import SummaryTable from '@/components/SummaryTable/Table';
-import TopGamesCard from '@/components/TopGames/TopGamesCard';
+import SummaryTable from '@/features/summary/summary-list/SummaryTable/Table';
+import TopGamesCard from '@/features/summary/summary-top-game/TopGames/TopGamesCard';
 import Loading from '@/components/UI/Loading';
 import Error from '@/components/UI/Error';
 
