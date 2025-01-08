@@ -5,7 +5,7 @@ interface TopPlayersCardProps {
   players: {
     playerId: string;
     stake: number;
-    win: number;
+    winloss: number;
   }[];
   date: string;
 }
@@ -40,7 +40,7 @@ export default function TopPlayersCard({ players, date }: TopPlayersCardProps) {
                       Stake: {player.stake.toLocaleString()}
                     </div>
                     <div className="text-sm text-green-600">
-                      Win: {player.win.toLocaleString()}
+                      Win/Loss: {player.winloss.toLocaleString()}
                     </div>
                   </div>
                 </div>

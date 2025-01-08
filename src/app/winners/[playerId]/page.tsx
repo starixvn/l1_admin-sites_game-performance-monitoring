@@ -22,7 +22,7 @@ export default async function WinnerDetails({ params, searchParams }: Props) {
       <WinnerStats
         stake={details.totalStake}
         payout={details.totalPayout}
-        win={details.totalWin}
+        winloss={details.totalWinloss}
       />
 
       <div className="mt-6">

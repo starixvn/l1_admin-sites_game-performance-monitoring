@@ -1,10 +1,14 @@
 interface WinnerStatsProps {
   stake: number;
   payout: number;
-  win: number;
+  winloss: number;
 }
 
-export default function WinnerStats({ stake, payout, win }: WinnerStatsProps) {
+export default function WinnerStats({
+  stake,
+  payout,
+  winloss,
+}: WinnerStatsProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       <div className="bg-white p-4 rounded-lg shadow">
@@ -16,11 +20,11 @@ export default function WinnerStats({ stake, payout, win }: WinnerStatsProps) {
         <div className="text-xl font-bold">{payout.toLocaleString()}</div>
       </div>
       <div className="bg-white p-4 rounded-lg shadow">
-        <div className="text-gray-500 text-sm">Total Win</div>
+        <div className="text-gray-500 text-sm">Total Win/Loss</div>
         <div
-          className={`text-xl font-bold ${win >= 0 ? 'text-green-600' : 'text-red-600'}`}
+          className={`text-xl font-bold ${winloss >= 0 ? 'text-green-600' : 'text-red-600'}`}
         >
-          {win.toLocaleString()}
+          {winloss.toLocaleString()}
         </div>
       </div>
     </div>

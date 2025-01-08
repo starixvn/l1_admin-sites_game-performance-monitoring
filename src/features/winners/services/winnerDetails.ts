@@ -21,7 +21,7 @@ export async function getWinnerDetails(playerId: string, date: string) {
           totalTickets: { $sum: '$tickets' },
           totalStake: { $sum: '$USD.stake' },
           totalPayout: { $sum: '$USD.payout' },
-          totalWin: { $sum: '$USD.win' },
+          totalWinloss: { $sum: '$USD.winloss' },
           roundIds: { $push: '$roundIds' },
         },
       },

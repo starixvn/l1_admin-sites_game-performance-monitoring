@@ -155,16 +155,16 @@ export abstract class SummaryService implements BaseSummaryService {
       await connectDB();
       const topPlayers = await this.getModel()
         .aggregate([
-          { $match: { ...query, 'USD.win': { $gt: 0 } } },
+          { $match: { ...query, 'USD.winloss': { $gt: 0 } } },
           {
             $group: {
               _id: '$playerId',
               playerId: { $first: '$playerId' },
               stake: { $sum: '$USD.stake' },
-              win: { $sum: '$USD.win' },
+              winloss: { $sum: '$USD.winloss' },
             },
           },
-          { $sort: { win: -1 } },
+          { $sort: { winloss: -1 } },
           { $limit: 10 },
         ])
         .exec();
