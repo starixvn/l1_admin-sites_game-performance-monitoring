@@ -1,3 +1,5 @@
+import { formatWinLoss } from '@/utils/format';
+
 interface TopGame {
   gameId: string;
   gameName: string;
@@ -39,7 +41,7 @@ export default function TopGamesCard({
                 <span
                   className={`font-bold ${isProfit ? 'text-green-600' : 'text-red-600'}`}
                 >
-                  {game.currency} {game.winloss.toLocaleString()}
+                  {formatWinLoss(game.winloss)} {game.currency}
                 </span>
               </div>
             ))}

@@ -1,5 +1,8 @@
+import { formatCurrency, formatWinLoss } from '@/utils/format';
+
 interface Ticket {
   roundId: number;
+  gameId: number;
   stake: number;
   payout: number;
   refund: number;
@@ -30,18 +33,21 @@ export default function WinnerRounds({ tickets }: WinnerRoundsProps) {
                   Round ID
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Game ID
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Time
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Stake
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Payout
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Refund
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Win/Loss
                 </th>
               </tr>
@@ -52,24 +58,27 @@ export default function WinnerRounds({ tickets }: WinnerRoundsProps) {
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">
                     {ticket.roundId}
                   </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {ticket.gameId}
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {formatDate(ticket.time)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {ticket.stake.toLocaleString()}
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right">
+                    {formatCurrency(ticket.stake)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {ticket.payout.toLocaleString()}
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right">
+                    {formatCurrency(ticket.payout)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {ticket.refund.toLocaleString()}
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right">
+                    {formatCurrency(ticket.refund)}
                   </td>
                   <td
-                    className={`px-6 py-4 whitespace-nowrap text-sm ${
+                    className={`px-6 py-4 whitespace-nowrap text-sm text-right ${
                       ticket.winloss >= 0 ? 'text-green-600' : 'text-red-600'
                     }`}
                   >
-                    {ticket.winloss.toLocaleString()}
+                    {formatWinLoss(ticket.winloss)}
                   </td>
                 </tr>
               ))}

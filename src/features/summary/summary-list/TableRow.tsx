@@ -1,4 +1,4 @@
-import { DailySummary } from '@/features/summary/models/DailySummary';
+import { formatCurrency, formatWinLoss } from '@/utils/format';
 
 interface TableRowProps {
   summary: {
@@ -33,19 +33,21 @@ export default function TableRow({ summary, showHour }: TableRowProps) {
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
         {summary.currency}
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-        {summary.stake.toLocaleString()}
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right">
+        {formatCurrency(summary.stake)}
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-        {summary.payout.toLocaleString()}
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right">
+        {formatCurrency(summary.payout)}
       </td>
       <td
-        className={`px-6 py-4 whitespace-nowrap text-sm ${summary.winloss >= 0 ? 'text-green-600' : 'text-red-600'}`}
+        className={`px-6 py-4 whitespace-nowrap text-sm text-right ${
+          summary.winloss >= 0 ? 'text-green-600' : 'text-red-600'
+        }`}
       >
-        {summary.winloss.toLocaleString()}
+        {formatWinLoss(summary.winloss)}
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-        {summary.tickets}
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right">
+        {summary.tickets.toLocaleString()}
       </td>
     </tr>
   );

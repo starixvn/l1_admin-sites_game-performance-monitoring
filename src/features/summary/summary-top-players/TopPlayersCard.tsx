@@ -1,5 +1,6 @@
 import { FaCrown } from 'react-icons/fa';
 import Link from 'next/link';
+import { formatCurrency, formatWinLoss } from '@/utils/format';
 
 interface TopPlayersCardProps {
   players: {
@@ -37,10 +38,10 @@ export default function TopPlayersCard({ players, date }: TopPlayersCardProps) {
                   </div>
                   <div className="text-right">
                     <div className="text-sm text-gray-500">
-                      Stake: {player.stake.toLocaleString()}
+                      Stake: {formatCurrency(player.stake)}
                     </div>
                     <div className="text-sm text-green-600">
-                      Win/Loss: {player.winloss.toLocaleString()}
+                      Win/Loss: {formatWinLoss(player.winloss)}
                     </div>
                   </div>
                 </div>
