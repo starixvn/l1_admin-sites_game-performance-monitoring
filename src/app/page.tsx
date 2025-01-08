@@ -72,7 +72,7 @@ export default async function DailySummary() {
           games={topGames.losses}
           isProfit={false}
         />
-        <TopPlayersCard players={topPlayers} />
+        <TopPlayersCard players={topPlayers} date={currentDate} />
       </div>
 
       <div className="bg-white rounded-lg shadow">
