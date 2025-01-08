@@ -1,28 +1,82 @@
-interface WinnerRoundsProps {
-  roundIds: number[];
+interface Ticket {
+  roundId: number;
+  stake: number;
+  payout: number;
+  refund: number;
+  winloss: number;
+  time: string;
 }
 
-export default function WinnerRounds({ roundIds }: WinnerRoundsProps) {
-  // Flatten and deduplicate round IDs
-  const uniqueRoundIds = [...new Set(roundIds.flat())];
+interface WinnerRoundsProps {
+  tickets: Ticket[];
+}
+
+export default function WinnerRounds({ tickets }: WinnerRoundsProps) {
+  const formatDate = (date: string) => {
+    return new Date(date).toLocaleString();
+  };
 
   return (
     <div className="bg-white rounded-lg shadow">
       <div className="px-4 py-5 sm:p-6">
         <h3 className="text-lg font-medium leading-6 text-gray-900 mb-4">
-          Round IDs
+          Round Details
         </h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
-          {uniqueRoundIds.map((roundId) => (
-            <div
-              key={roundId}
-              className="bg-gray-50 px-3 py-2 rounded text-sm text-gray-600"
-            >
-              {roundId}
-            </div>
-          ))}
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead>
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Round ID
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Time
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Stake
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Payout
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Refund
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Win/Loss
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {tickets.map((ticket) => (
+                <tr key={ticket.roundId} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">
+                    {ticket.roundId}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {formatDate(ticket.time)}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {ticket.stake.toLocaleString()}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {ticket.payout.toLocaleString()}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    {ticket.refund.toLocaleString()}
+                  </td>
+                  <td
+                    className={`px-6 py-4 whitespace-nowrap text-sm ${
+                      ticket.winloss >= 0 ? 'text-green-600' : 'text-red-600'
+                    }`}
+                  >
+                    {ticket.winloss.toLocaleString()}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-        {uniqueRoundIds.length === 0 && (
+        {tickets.length === 0 && (
           <div className="text-gray-500 text-center py-4">No rounds found</div>
         )}
       </div>

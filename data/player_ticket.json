@@ -1,0 +1,37 @@
+{
+  "code": "USD",
+  "currency": "$US",
+  "gameId": 2,
+  "isTest": 0,
+  "loss": 0,
+  "operatorId": "ONEworks1",
+  "payout": 1.96,
+  "playerId": "70001",
+  "refund": 0,
+  "roundId": 3411907,
+  "roundTime": "2025-01-08T02:28:52.004Z",
+  "siteId": "",
+  "siteName": "lumi",
+  "stake": 1,
+  "subRoundId": 3411907,
+  "tickets": 1,
+
+  "USD": {
+    "loss": 0,
+    "payout": 1.96,
+    "refund": 0,
+    "stake": 1,
+    "win": 0.96,
+    "winloss": 0.96
+  },
+  "VND": {
+    "loss": 0,
+    "payout": 49440.02,
+    "refund": 0,
+    "stake": 25224.5,
+    "win": 24215.52,
+    "winloss": 24215.52
+  },
+  "win": 0.96,
+  "winloss": 0.96
+}
