@@ -33,6 +33,16 @@ export default async function DailySummary({
       day: 'numeric',
     });
 
+    // Calculate totals for current date
+    const totals = data.reduce(
+      (acc, game) => ({
+        stake: acc.stake + game.stake,
+        payout: acc.payout + game.payout,
+        winloss: acc.winloss + game.winloss,
+      }),
+      { stake: 0, payout: 0, winloss: 0 }
+    );
+
     return (
       <PageLayout
         title={`Game Performance Monitor - Daily Summary (${formattedDate})`}
@@ -42,9 +52,9 @@ export default async function DailySummary({
         </div>
 
         <SummaryStats
-          totalStake={data.totalStake}
-          totalPayout={data.totalPayout}
-          totalWinLoss={data.totalWinLoss}
+          totalStake={totals.stake}
+          totalPayout={totals.payout}
+          totalWinLoss={totals.winloss}
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">

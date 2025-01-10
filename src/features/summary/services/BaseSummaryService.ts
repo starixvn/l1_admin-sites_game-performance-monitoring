@@ -8,6 +8,7 @@ export abstract class SummaryService implements BaseSummaryService {
   async getData(query = {}) {
     try {
       await connectDB();
+
       const summaries = await this.getModel()
         .aggregate([
           { $match: query },
@@ -47,10 +48,10 @@ export abstract class SummaryService implements BaseSummaryService {
   async getTopGames(query = {}) {
     try {
       await connectDB();
-      const [topProfits, topLosses] = await Promise.all([
+      const [allWinLosses] = await Promise.all([
         this.getModel()
           .aggregate([
-            { $match: { ...query, 'USD.winloss': { $lt: 0 } } },
+            { $match: { ...query } },
             {
               $group: {
                 _id: '$gameId',
@@ -61,47 +62,31 @@ export abstract class SummaryService implements BaseSummaryService {
               },
             },
             { $sort: { winloss: 1 } },
-            { $limit: 5 },
-          ])
-          .exec(),
-        this.getModel()
-          .aggregate([
-            { $match: { ...query, 'USD.winloss': { $gt: 0 } } },
-            {
-              $group: {
-                _id: '$gameId',
-                gameId: { $first: '$gameId' },
-                winloss: { $sum: '$USD.winloss' },
-                currency: { $first: 'USD' },
-                time: { $first: '$time' },
-              },
-            },
-            { $sort: { winloss: -1 } },
-            { $limit: 5 },
           ])
           .exec(),
       ]);
 
-      const gameIds = [
-        ...new Set([
-          ...topProfits.map((g) => g.gameId),
-          ...topLosses.map((g) => g.gameId),
-        ]),
-      ];
+      const gameIds = [...new Set([...allWinLosses.map((g) => g.gameId)])];
 
       const gameNames = await this.getGameNames(gameIds);
 
-      const profits = topProfits.map((game) => ({
-        ...game,
-        winloss: -1 * game.winloss,
-        gameName: gameNames[game.gameId] || `Game ${game.gameId}`,
-      }));
+      const profits = allWinLosses
+        .filter((game) => game.winloss < 0)
+        .sort((a, b) => a.winloss - b.winloss)
+        .map((game) => ({
+          ...game,
+          winloss: -1 * game.winloss,
+          gameName: gameNames[game.gameId] || `Game ${game.gameId}`,
+        }));
 
-      const losses = topLosses.map((game) => ({
-        ...game,
-        winloss: -1 * game.winloss,
-        gameName: gameNames[game.gameId] || `Game ${game.gameId}`,
-      }));
+      const losses = allWinLosses
+        .filter((game) => game.winloss > 0)
+        .sort((a, b) => a.winloss - b.winloss)
+        .map((game) => ({
+          ...game,
+          winloss: -1 * game.winloss,
+          gameName: gameNames[game.gameId] || `Game ${game.gameId}`,
+        }));
 
       return {
         profits: profits.length ? JSON.parse(JSON.stringify(profits)) : [],
