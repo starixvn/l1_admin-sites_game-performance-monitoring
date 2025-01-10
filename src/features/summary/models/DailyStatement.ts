@@ -1,4 +1,5 @@
-import { Schema, model, models } from 'mongoose';
+import { Schema, Model } from 'mongoose';
+import { useDB, getCollectionName } from '@/utils/db';
 
 export interface DailyStatement {
   playerId: string;
@@ -24,9 +25,13 @@ const dailyStatementSchema = new Schema<DailyStatement>(
       win: Number,
     },
   },
-  { collection: 'daily_statements' }
+  { collection: getCollectionName('daily_statements') }
 );
 
-export const DailyStatement =
-  models.DailyStatement ||
-  model('DailyStatement', dailyStatementSchema, 'daily_statements');
+export function getDailyStatementModel() {
+  const db = useDB('summary');
+  return (
+    db.models.DailyStatement ||
+    db.model<DailyStatement>('DailyStatement', dailyStatementSchema)
+  );
+}

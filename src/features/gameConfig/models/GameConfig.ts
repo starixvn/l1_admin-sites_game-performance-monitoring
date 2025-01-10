@@ -1,5 +1,5 @@
-import { Schema, Model, models } from 'mongoose';
-import { useDB } from '@/utils/db';
+import { Schema, Model } from 'mongoose';
+import { useDB, getCollectionName } from '@/utils/db';
 
 export interface GameConfig {
   _id: string;
@@ -17,7 +17,7 @@ const gameConfigSchema = new Schema<GameConfig>(
     enabled: { type: Boolean, required: true },
   },
   {
-    collection: 'game_configs',
+    collection: getCollectionName('game_configs'),
   }
 );
 

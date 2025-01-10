@@ -1,37 +1,33 @@
-import { DailyStatement } from '../models/DailyStatement';
+import { getDailyStatementModel } from '../models/DailyStatement';
 import { SummaryService } from './BaseSummaryService';
 
 class DailySummaryService extends SummaryService {
   protected getModel() {
-    return DailyStatement;
+    return getDailyStatementModel();
   }
 
-  async getData() {
-    const today = new Date().toISOString().split('T')[0];
-    const query = {
-      time: new Date(today),
-    };
+  async getData(date?: string) {
+    const queryDate = date ? new Date(date) : new Date();
+    const query = { time: queryDate };
     return super.getData(query);
   }
 
-  async getTopGames() {
-    const today = new Date().toISOString().split('T')[0];
-    const query = {
-      time: new Date(today),
-    };
+  async getTopGames(date?: string) {
+    const queryDate = date ? new Date(date) : new Date();
+    const query = { time: queryDate };
     return super.getTopGames(query);
   }
 
-  async getTopPlayers() {
-    const today = new Date().toISOString().split('T')[0];
-    const query = {
-      time: new Date(today),
-    };
+  async getTopPlayers(date?: string) {
+    const queryDate = date ? new Date(date) : new Date();
+    const query = { time: queryDate };
     return super.getTopPlayers(query);
   }
 }
 
 const dailySummaryService = new DailySummaryService();
-export const getData = () => dailySummaryService.getData();
-export const getTopGames = () => dailySummaryService.getTopGames();
-export const getTopPlayers = () => dailySummaryService.getTopPlayers();
+export const getData = (date?: string) => dailySummaryService.getData(date);
+export const getTopGames = (date?: string) =>
+  dailySummaryService.getTopGames(date);
+export const getTopPlayers = (date?: string) =>
+  dailySummaryService.getTopPlayers(date);

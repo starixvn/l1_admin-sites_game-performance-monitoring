@@ -1,3 +1,4 @@
+import { getCollectionName } from '@/utils/db';
 import { Schema, model, models } from 'mongoose';
 
 export interface HourlySummary {
@@ -68,7 +69,7 @@ const hourlySummarySchema = new Schema<HourlySummary>(
     },
   },
   {
-    collection: 'hourly_summaries',
+    collection: getCollectionName('hourly_summaries'),
   }
 );
 

@@ -1,49 +1,30 @@
 import mongoose from 'mongoose';
 
-declare global {
-  var mongoose: {
-    conn: typeof mongoose | null;
-    promise: Promise<typeof mongoose> | null;
-  };
+const dbPostfix = process.env.DB_POSTFIX || '';
+const collectionPostfix = process.env.COLLECTION_POSTFIX || '';
+
+export function useDB(dbName: string) {
+  const fullDbName = `${dbName}${dbPostfix}`;
+  return mongoose.connection.useDb(fullDbName, { useCache: true });
 }
 
-const MONGODB_URI = process.env.MONGODB_URI!;
-
-if (!MONGODB_URI) {
-  throw new Error('Please define the MONGODB_URI environment variable');
-}
-
-let cached = global.mongoose;
-
-if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null };
+export function getCollectionName(baseName: string) {
+  return `${baseName}${collectionPostfix}`;
 }
 
 export async function connectDB() {
-  if (cached.conn) {
-    return cached.conn;
-  }
-
-  if (!cached.promise) {
-    const opts = {
-      maxPoolSize: 10,
-      bufferCommands: false,
-      dbName: 'summary',
-    };
-
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then(() => mongoose);
-  }
-
   try {
-    cached.conn = await cached.promise;
-  } catch (e) {
-    cached.promise = null;
-    throw e;
+    if (mongoose.connection.readyState === 1) {
+      return;
+    }
+
+    if (!process.env.MONGODB_URI) {
+      throw new Error('MONGODB_URI is not defined');
+    }
+
+    await mongoose.connect(process.env.MONGODB_URI);
+  } catch (error) {
+    console.error('MongoDB connection error:', error);
+    throw error;
   }
-
-  return cached.conn;
-}
-
-export function useDB(dbName: string) {
-  return mongoose.connection.useDb(dbName, { useCache: true });
 }

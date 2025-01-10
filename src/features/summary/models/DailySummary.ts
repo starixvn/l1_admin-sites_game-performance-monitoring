@@ -1,3 +1,4 @@
+import { getCollectionName } from '@/utils/db';
 import { Schema, model, models, Model } from 'mongoose';
 
 // TypeScript interfaces
@@ -63,7 +64,7 @@ const dailySummarySchema = new Schema<DailySummary>(
     win: { type: Number, required: true },
     winloss: { type: Number, required: true },
   },
-  { collection: 'daily_summaries' }
+  { collection: getCollectionName('daily_summaries') }
 );
 
 // Force the model to use 'summary' database

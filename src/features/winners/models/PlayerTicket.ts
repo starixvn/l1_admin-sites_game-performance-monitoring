@@ -1,5 +1,5 @@
 import { Schema, Model } from 'mongoose';
-import { useDB } from '@/utils/db';
+import { useDB, getCollectionName } from '@/utils/db';
 
 export interface PlayerTicket {
   playerId: string;
@@ -35,7 +35,7 @@ const playerTicketSchema = new Schema<PlayerTicket>(
       winloss: Number,
     },
   },
-  { collection: 'ticket_silos' }
+  { collection: getCollectionName('ticket_silos') }
 );
 
 export function getPlayerTicketModel() {
