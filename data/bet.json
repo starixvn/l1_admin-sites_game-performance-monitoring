@@ -1,0 +1,26 @@
+{
+  "betwin": 0,
+  "currency": "YEN",
+  "even": 30,
+  "name": "Thor67342",
+  "odd": 0,
+  "odds": {
+    "even": 1.96,
+    "odd": 1.96,
+    "red2": 2.4,
+    "red3": 3.75,
+    "red4": 14.4,
+    "white3": 3.75,
+    "white4": 14.4
+  },
+  "operatorId": "ONEworks1",
+  "paid": true,
+  "playerId": "151481278",
+  "rate": 1,
+  "red2": 0,
+  "red3": 0,
+  "red4": 0,
+  "roundId": 3113665,
+  "white3": 0,
+  "white4": 0
+}

@@ -1,6 +1,12 @@
 import { connectDB } from '@/utils/db';
-import { DailyStatement } from '@/features/summary/models/DailyStatement';
-import { getPlayerTicketModel } from '../models/PlayerTicket';
+import { getDailyStatementModel } from '@/features/summary/models/DailyStatement';
+import { getPlayerTicketModel, PlayerTicket } from '../models/PlayerTicket';
+import { getRoundDetails } from './roundDetails';
+import { Round, SettlementResult } from '../models/Round';
+
+interface TicketWithSettlement extends PlayerTicket {
+  settlementResult: SettlementResult | null;
+}
 
 export async function getWinnerDetails(playerId: string, date: string) {
   try {
@@ -8,27 +14,29 @@ export async function getWinnerDetails(playerId: string, date: string) {
     const PlayerTicket = getPlayerTicketModel();
 
     const [details, tickets] = await Promise.all([
-      DailyStatement.aggregate([
-        {
-          $match: {
-            playerId,
-            time: new Date(date),
+      getDailyStatementModel()
+        .aggregate([
+          {
+            $match: {
+              playerId,
+              time: new Date(date),
+            },
           },
-        },
-        {
-          $group: {
-            _id: '$playerId',
-            operatorId: { $first: '$operatorId' },
-            currency: { $first: '$currency' },
-            siteId: { $first: '$siteId' },
-            totalTickets: { $sum: '$tickets' },
-            totalStake: { $sum: '$USD.stake' },
-            totalPayout: { $sum: '$USD.payout' },
-            totalWinloss: { $sum: '$USD.winloss' },
-            roundIds: { $push: '$roundIds' },
+          {
+            $group: {
+              _id: '$playerId',
+              operatorId: { $first: '$operatorId' },
+              currency: { $first: '$currency' },
+              siteId: { $first: '$siteId' },
+              totalTickets: { $sum: '$tickets' },
+              totalStake: { $sum: '$USD.stake' },
+              totalPayout: { $sum: '$USD.payout' },
+              totalWinloss: { $sum: '$USD.winloss' },
+              roundIds: { $push: '$roundIds' },
+            },
           },
-        },
-      ]).exec(),
+        ])
+        .exec(),
 
       PlayerTicket.aggregate([
         {
@@ -61,12 +69,24 @@ export async function getWinnerDetails(playerId: string, date: string) {
       ]).exec(),
     ]);
 
-    return (
-      {
-        ...details[0],
-        tickets: tickets || [],
-      } || null
+    // Fetch round details for each ticket
+    const ticketsWithRoundInfo: TicketWithSettlement[] = await Promise.all(
+      tickets.map(async (ticket) => {
+        const roundDetails = await getRoundDetails(
+          ticket.gameId,
+          ticket.roundId
+        );
+        return {
+          ...ticket,
+          settlementResult: roundDetails?.settlementResult || null,
+        };
+      })
     );
+
+    return {
+      ...details[0],
+      tickets: ticketsWithRoundInfo || [],
+    };
   } catch (error) {
     console.error('Error fetching winner details:', error);
     return null;

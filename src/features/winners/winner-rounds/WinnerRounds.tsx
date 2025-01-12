@@ -1,4 +1,7 @@
 import { formatCurrency, formatWinLoss } from '@/utils/format';
+import SettlementResult from './SettlementResult';
+import TableHeader from './components/TableHeader';
+import TableRow from './components/TableRow';
 
 interface Ticket {
   roundId: number;
@@ -8,6 +11,7 @@ interface Ticket {
   refund: number;
   winloss: number;
   time: string;
+  settlementResult: any;
 }
 
 interface WinnerRoundsProps {
@@ -15,10 +19,6 @@ interface WinnerRoundsProps {
 }
 
 export default function WinnerRounds({ tickets }: WinnerRoundsProps) {
-  const formatDate = (date: string) => {
-    return new Date(date).toLocaleString();
-  };
-
   return (
     <div className="bg-white rounded-lg shadow">
       <div className="px-4 py-5 sm:p-6">
@@ -27,60 +27,10 @@ export default function WinnerRounds({ tickets }: WinnerRoundsProps) {
         </h3>
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
-            <thead>
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Round ID
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Game ID
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Time
-                </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Stake
-                </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Payout
-                </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Refund
-                </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Win/Loss
-                </th>
-              </tr>
-            </thead>
+            <TableHeader />
             <tbody className="bg-white divide-y divide-gray-200">
               {tickets.map((ticket) => (
-                <tr key={ticket.roundId} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">
-                    {ticket.roundId}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    {ticket.gameId}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {formatDate(ticket.time)}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right">
-                    {formatCurrency(ticket.stake)}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right">
-                    {formatCurrency(ticket.payout)}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right">
-                    {formatCurrency(ticket.refund)}
-                  </td>
-                  <td
-                    className={`px-6 py-4 whitespace-nowrap text-sm text-right ${
-                      ticket.winloss >= 0 ? 'text-green-600' : 'text-red-600'
-                    }`}
-                  >
-                    {formatWinLoss(ticket.winloss)}
-                  </td>
-                </tr>
+                <TableRow key={ticket.roundId} ticket={ticket} />
               ))}
             </tbody>
           </table>
