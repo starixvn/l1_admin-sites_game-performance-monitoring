@@ -2,7 +2,7 @@ import { connectDB } from '@/utils/db';
 import { getRoundModel } from '../models/Round';
 import { getCollectionName } from '../constants/gameCollectionMapper';
 
-export async function getRoundDetails(gameId: number, roundId: string) {
+export async function getRoundDetails(gameId: number, roundId: number) {
   try {
     await connectDB();
     const collectionName = getCollectionName(gameId);

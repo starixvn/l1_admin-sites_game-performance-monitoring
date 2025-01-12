@@ -2,10 +2,13 @@ import { connectDB } from '@/utils/db';
 import { getDailyStatementModel } from '@/features/summary/models/DailyStatement';
 import { getPlayerTicketModel, PlayerTicket } from '../models/PlayerTicket';
 import { getRoundDetails } from './roundDetails';
-import { Round, SettlementResult } from '../models/Round';
+import { getBetDetails } from './betDetails';
+import { SettlementResult } from '../models/Round';
+import { Bet } from '../models/Bet';
 
-interface TicketWithSettlement extends PlayerTicket {
+interface TicketWithDetails extends PlayerTicket {
   settlementResult: SettlementResult | null;
+  betDetails: Bet | null;
 }
 
 export async function getWinnerDetails(playerId: string, date: string) {
@@ -69,23 +72,25 @@ export async function getWinnerDetails(playerId: string, date: string) {
       ]).exec(),
     ]);
 
-    // Fetch round details for each ticket
-    const ticketsWithRoundInfo: TicketWithSettlement[] = await Promise.all(
+    // Fetch both round and bet details for each ticket
+    const ticketsWithDetails: TicketWithDetails[] = await Promise.all(
       tickets.map(async (ticket) => {
-        const roundDetails = await getRoundDetails(
-          ticket.gameId,
-          ticket.roundId
-        );
+        const [roundDetails, betDetails] = await Promise.all([
+          getRoundDetails(ticket.gameId, ticket.roundId),
+          getBetDetails(ticket.gameId, ticket.roundId, playerId),
+        ]);
+
         return {
           ...ticket,
           settlementResult: roundDetails?.settlementResult || null,
+          betDetails: betDetails || null,
         };
       })
     );
 
     return {
       ...details[0],
-      tickets: ticketsWithRoundInfo || [],
+      tickets: ticketsWithDetails || [],
     };
   } catch (error) {
     console.error('Error fetching winner details:', error);

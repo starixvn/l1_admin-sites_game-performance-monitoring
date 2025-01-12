@@ -1,5 +1,9 @@
+'use client';
+
 import { formatCurrency, formatWinLoss } from '@/utils/format';
 import SettlementResult from '../SettlementResult';
+import BetDetails from '../BetDetails';
+import { Bet } from '../../models/Bet';
 
 interface TableRowProps {
   ticket: {
@@ -11,6 +15,7 @@ interface TableRowProps {
     winloss: number;
     time: string;
     settlementResult: any;
+    betDetails: Bet | null;
   };
 }
 
@@ -32,6 +37,9 @@ export default function TableRow({ ticket }: TableRowProps) {
         {ticket.settlementResult && (
           <SettlementResult result={ticket.settlementResult} />
         )}
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+        {ticket.betDetails && <BetDetails bet={ticket.betDetails} />}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right">
         {formatCurrency(ticket.stake)}
