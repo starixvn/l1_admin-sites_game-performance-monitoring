@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { connectDB } from '@/utils/db';
-import { DailySummary } from '@/models/DailySummary';
+import { DailySummary } from '@/features/summary/models/DailySummary';
 
 export async function GET(request: Request) {
   try {
@@ -13,12 +13,12 @@ export async function GET(request: Request) {
     const summaries = await DailySummary.aggregate([
       {
         $sort: {
-          [sortBy]: order === 'desc' ? -1 : 1
-        }
+          [sortBy]: order === 'desc' ? -1 : 1,
+        },
       },
       {
-        $limit: 100 // Adjust limit as needed
-      }
+        $limit: 100, // Adjust limit as needed
+      },
     ]);
 
     return NextResponse.json(summaries);
@@ -29,4 +29,4 @@ export async function GET(request: Request) {
       { status: 500 }
     );
   }
-} 
+}

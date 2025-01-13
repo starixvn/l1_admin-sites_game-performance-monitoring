@@ -11,6 +11,11 @@ interface TicketWithDetails extends PlayerTicket {
   betDetails: Bet | null;
 }
 
+interface RoundDetails {
+  settlementResult?: SettlementResult;
+  [key: string]: any;
+}
+
 export async function getWinnerDetails(playerId: string, date: string) {
   try {
     await connectDB();
@@ -76,7 +81,10 @@ export async function getWinnerDetails(playerId: string, date: string) {
     const ticketsWithDetails: TicketWithDetails[] = await Promise.all(
       tickets.map(async (ticket) => {
         const [roundDetails, betDetails] = await Promise.all([
-          getRoundDetails(ticket.gameId, ticket.roundId),
+          getRoundDetails(
+            ticket.gameId,
+            ticket.roundId
+          ) as Promise<RoundDetails>,
           getBetDetails(ticket.gameId, ticket.roundId, playerId),
         ]);
 

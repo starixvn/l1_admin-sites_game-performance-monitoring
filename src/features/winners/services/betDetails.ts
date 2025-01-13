@@ -2,6 +2,17 @@ import { connectDB } from '@/utils/db';
 import { getBetModel } from '../models/Bet';
 import { GAME_COLLECTION_MAP } from '../constants/gameCollectionMapper';
 
+interface BetDetails {
+  even?: number;
+  odd?: number;
+  red2?: number;
+  red3?: number;
+  red4?: number;
+  white3?: number;
+  white4?: number;
+  [key: string]: any;
+}
+
 export async function getBetDetails(
   gameId: number,
   roundId: number,
@@ -18,12 +29,12 @@ export async function getBetDetails(
 
     const BetModel = getBetModel(collectionName);
 
-    const bet = await BetModel.findOne({
+    const bet = (await BetModel.findOne({
       roundId,
       playerId,
     })
       .lean()
-      .exec();
+      .exec()) as BetDetails;
 
     if (!bet) return null;
 

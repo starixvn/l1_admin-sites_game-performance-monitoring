@@ -35,7 +35,10 @@ export default async function DailySummary({
 
     // Calculate totals for current date
     const totals = data.reduce(
-      (acc, game) => ({
+      (
+        acc: { stake: number; payout: number; winloss: number },
+        game: { stake: number; payout: number; winloss: number }
+      ) => ({
         stake: acc.stake + game.stake,
         payout: acc.payout + game.payout,
         winloss: acc.winloss + game.winloss,

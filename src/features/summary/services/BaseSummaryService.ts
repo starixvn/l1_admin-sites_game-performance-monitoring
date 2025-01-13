@@ -1,6 +1,13 @@
 import { connectDB } from '@/utils/db';
 import { getGameConfigModel } from '@/features/gameConfig/models/GameConfig';
-import { BaseSummaryService, GameSummary, TopGamesResult } from './types';
+import { BaseSummaryService, GameSummary } from './types';
+
+interface WinLossData {
+  gameId: string;
+  winloss: number;
+  time: Date;
+  currency: string;
+}
 
 export abstract class SummaryService implements BaseSummaryService {
   protected abstract getModel(): any;
@@ -29,10 +36,10 @@ export abstract class SummaryService implements BaseSummaryService {
         ])
         .exec();
 
-      const gameIds = summaries.map((s) => s.gameId);
+      const gameIds = summaries.map((s: any) => s.gameId);
       const gameNames = await this.getGameNames(gameIds);
 
-      const enrichedSummaries = summaries.map((summary) => ({
+      const enrichedSummaries = summaries.map((summary: any) => ({
         ...summary,
         winloss: -1 * summary.winloss,
         gameName: gameNames[summary.gameId] || `Game ${summary.gameId}`,
@@ -66,23 +73,25 @@ export abstract class SummaryService implements BaseSummaryService {
           .exec(),
       ]);
 
-      const gameIds = [...new Set([...allWinLosses.map((g) => g.gameId)])];
+      const gameIds = [
+        ...new Set([...allWinLosses.map((g: WinLossData) => g.gameId)]),
+      ];
 
       const gameNames = await this.getGameNames(gameIds);
 
       const profits = allWinLosses
-        .filter((game) => game.winloss < 0)
-        .sort((a, b) => a.winloss - b.winloss)
-        .map((game) => ({
+        .filter((game: WinLossData) => game.winloss < 0)
+        .sort((a: WinLossData, b: WinLossData) => a.winloss - b.winloss)
+        .map((game: WinLossData) => ({
           ...game,
           winloss: -1 * game.winloss,
           gameName: gameNames[game.gameId] || `Game ${game.gameId}`,
         }));
 
       const losses = allWinLosses
-        .filter((game) => game.winloss > 0)
-        .sort((a, b) => a.winloss - b.winloss)
-        .map((game) => ({
+        .filter((game: WinLossData) => game.winloss > 0)
+        .sort((a: WinLossData, b: WinLossData) => a.winloss - b.winloss)
+        .map((game: WinLossData) => ({
           ...game,
           winloss: -1 * game.winloss,
           gameName: gameNames[game.gameId] || `Game ${game.gameId}`,
