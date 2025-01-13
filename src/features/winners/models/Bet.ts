@@ -1,5 +1,6 @@
 import { useDB } from '@/utils/db';
-import mongoose, { Schema, Document } from 'mongoose';
+import { Schema, Document } from 'mongoose';
+import config from '../../../../configs.json';
 
 export interface Bet extends Document {
   roundId: number;
@@ -27,7 +28,7 @@ const betSchema = new Schema<Bet>({
 
 export function getBetModel(gameCollection: string) {
   const db = useDB('minigame');
-  const collectionPostfix = process.env.COLLECTION_POSTFIX || '';
+  const collectionPostfix = config.COLLECTION_POSTFIX || '';
   const fullCollectionName = `${gameCollection}_cuocs${collectionPostfix}`;
 
   return (

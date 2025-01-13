@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
+import config from '../../configs.json';
 
-const dbPostfix = process.env.DB_POSTFIX || '';
-const collectionPostfix = process.env.COLLECTION_POSTFIX || '';
+const dbPostfix = config.DB_POSTFIX || '';
+const collectionPostfix = config.COLLECTION_POSTFIX || '';
 
 export function useDB(dbName: string) {
   const fullDbName = `${dbName}${dbPostfix}`;
@@ -18,11 +19,11 @@ export async function connectDB() {
       return;
     }
 
-    if (!process.env.MONGODB_URI) {
+    if (!config.MONGODB_URI) {
       throw new Error('MONGODB_URI is not defined');
     }
 
-    await mongoose.connect(process.env.MONGODB_URI);
+    await mongoose.connect(config.MONGODB_URI);
   } catch (error) {
     console.error('MongoDB connection error:', error);
     throw error;

@@ -1,4 +1,4 @@
-import { Schema, Model } from 'mongoose';
+import { Schema } from 'mongoose';
 import { useDB, getCollectionName } from '@/utils/db';
 
 export interface GameConfig {

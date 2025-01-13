@@ -1,5 +1,6 @@
 import { Schema, Document } from 'mongoose';
 import { useDB } from '@/utils/db';
+import config from '../../../../configs.json';
 
 interface SettlementResult {
   red1?: boolean;
@@ -46,7 +47,7 @@ const roundSchema = new Schema<Round>({
 
 export function getRoundModel(gameCollection: string) {
   const db = useDB('minigame');
-  const collectionPostfix = process.env.COLLECTION_POSTFIX || '';
+  const collectionPostfix = config.COLLECTION_POSTFIX || '';
   const fullCollectionName = `${gameCollection}_phiens${collectionPostfix}`;
 
   return (

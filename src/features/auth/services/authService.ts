@@ -1,5 +1,6 @@
 import { compare } from 'bcryptjs';
 import Cookies from 'js-cookie';
+import config from '../../../../configs.json';
 
 export interface AuthCredentials {
   username: string;
@@ -9,8 +10,8 @@ export interface AuthCredentials {
 export class AuthService {
   static async login(credentials: AuthCredentials): Promise<boolean> {
     try {
-      const validUsername = process.env.NEXT_PUBLIC_ADMIN_USER;
-      const encodedPasswordHash = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
+      const validUsername = config.ADMIN_USER;
+      const encodedPasswordHash = config.NEXT_PUBLIC_ADMIN_PASSWORD;
 
       if (!validUsername || !encodedPasswordHash) {
         throw new Error('Authentication configuration missing');
