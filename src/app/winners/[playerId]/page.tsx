@@ -35,7 +35,7 @@ export default async function WinnerDetails({ params, searchParams }: Props) {
       </div>
 
       <div className="mt-6">
-        <WinnerRounds tickets={details.tickets} />
+        <WinnerRounds tickets={details.tickets} date={searchParams.date} />
       </div>
     </PageLayout>
   );
