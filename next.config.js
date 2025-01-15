@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+const basePath = '';
 const nextConfig = {
   output: 'standalone',
   poweredByHeader: false,
@@ -11,6 +12,10 @@ const nextConfig = {
     };
     return config;
   },
+  experimental: {
+    outputStandalone: true,
+  },
+  basePath,
 };
 
 module.exports = nextConfig;
