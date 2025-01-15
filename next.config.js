@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
-import configs from './configs.json';
+
+const configs = require('./configs.json');
+
 const nextConfig = {
   output: 'standalone',
   poweredByHeader: false,
