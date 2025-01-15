@@ -13,6 +13,7 @@ COPY postcss.config.js tailwind.config.js ./
 RUN npm ci --include=dev
 
 # Copy the entire src directory first
+COPY configs ./configs
 COPY src ./src
 COPY .env.${NODE_ENV} .env
 
