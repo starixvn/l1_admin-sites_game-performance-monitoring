@@ -40,5 +40,4 @@ RUN addgroup -g 1001 -S nodejs && \
 USER nextjs
 
 EXPOSE 5000
-ENV PORT 5000
-CMD HOSTNAME="0.0.0.0" node server.js
+CMD ["node", "server.js"] 
