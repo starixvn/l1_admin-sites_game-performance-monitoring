@@ -25,7 +25,7 @@ ENV PORT=5000
 
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
-COPY --from=builder /app/.env ./.env
+COPY --from=builder /app/configs.json ./configs.json
 
 RUN addgroup -g 1001 -S nodejs && \
     adduser -S nextjs -u 1001 && \
