@@ -15,6 +15,7 @@ const nextConfig = {
     return config;
   },
   basePath: configs.BASE_PATH,
+  assetPrefix: configs.BASE_PATH,
 };
 
 module.exports = nextConfig;
