@@ -14,9 +14,6 @@ const nextConfig = {
     };
     return config;
   },
-  experimental: {
-    outputStandalone: true,
-  },
   basePath: configs.BASE_PATH,
 };
 
