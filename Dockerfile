@@ -5,7 +5,7 @@ WORKDIR /app
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
-COPY package.json package-lock.json ./
+COPY package.json package-lock.json tsconfig.json next.config.js ./
 RUN npm ci
 
 COPY . .
@@ -25,7 +25,8 @@ ENV PORT=5000
 
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
-COPY --from=builder /app/configs.json ./configs.json
+COPY --from=builder /app/.env ./.env
+COPY --from=builder /app/package.json ./package.json
 
 RUN addgroup -g 1001 -S nodejs && \
     adduser -S nextjs -u 1001 && \
