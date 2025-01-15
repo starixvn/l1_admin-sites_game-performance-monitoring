@@ -5,10 +5,13 @@ WORKDIR /app
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
-COPY package.json package-lock.json tsconfig.json next.config.js ./
+# Copy config files first
+COPY package.json package-lock.json tsconfig.json next.config.js configs.json ./
+COPY postcss.config.js tailwind.config.js ./
 RUN npm ci
 
-COPY . .
+# Copy the entire src directory first
+COPY src ./src
 COPY .env.${NODE_ENV} .env
 
 ENV HOSTNAME=0.0.0.0
@@ -26,6 +29,7 @@ ENV PORT=5000
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/.env ./.env
+COPY --from=builder /app/configs.json ./configs.json
 COPY --from=builder /app/package.json ./package.json
 
 RUN addgroup -g 1001 -S nodejs && \
