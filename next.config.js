@@ -1,5 +1,5 @@
 /** @type {import('next').NextConfig} */
-const basePath = '';
+import configs from './configs.json';
 const nextConfig = {
   output: 'standalone',
   poweredByHeader: false,
@@ -15,7 +15,7 @@ const nextConfig = {
   experimental: {
     outputStandalone: true,
   },
-  basePath,
+  basePath: configs.BASE_PATH,
 };
 
 module.exports = nextConfig;
