@@ -1,6 +1,5 @@
 # Stage 1: Builder
 FROM hub.lumigame.com/base/node:20.9.0-alpine-24h1.1 AS builder
-RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 ARG NODE_ENV=production
