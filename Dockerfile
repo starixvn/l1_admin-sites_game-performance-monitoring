@@ -8,7 +8,9 @@ ENV NODE_ENV=${NODE_ENV}
 # Copy config files first
 COPY package.json package-lock.json tsconfig.json next.config.js configs.json ./
 COPY postcss.config.js tailwind.config.js ./
-RUN npm ci
+
+# Install ALL dependencies including devDependencies
+RUN npm ci --include=dev
 
 # Copy the entire src directory first
 COPY src ./src
