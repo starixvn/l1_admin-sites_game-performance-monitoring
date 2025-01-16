@@ -26,7 +26,7 @@ export default function WinnerStats({
         </div>
       </div>
       <div className="bg-white p-4 rounded-lg shadow">
-        <div className="text-gray-500 text-sm">Total Win/Loss</div>
+        <div className="text-gray-500 text-sm">House P/L</div>
         <div
           className={`text-xl font-bold text-right ${
             winloss >= 0 ? 'text-green-600' : 'text-red-600'
