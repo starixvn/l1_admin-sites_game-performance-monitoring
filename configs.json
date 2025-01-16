@@ -1,7 +1,7 @@
 {
-  "MONGODB_URI": "mongodb://readonly:ReadOnly%401234AAaa@10.10.50.20:39115/?authSource=admin&replicaSet=PROD-L1&readPreference=primary&appname=admin",
+  "MONGODB_URI": "mongodb://lmn_backend:LmnBackend@10.10.50.12:27105/?authSource=admin&replicaSet=L1ppLocal&readPreference=primary&appname=admin",
   "ADMIN_USER": "admin",
   "NEXT_PUBLIC_ADMIN_PASSWORD": "JDJhJDEwJDJDUHoxU2hSNi8vMURjblU5dEI4R3V1NXcwbUlBbEFwTTIuTEVyWHB4R0MvU1NoV2VJVGwy",
-  "DB_POSTFIX": "_arc",
-  "COLLECTION_POSTFIX": "_bk"
+  "DB_POSTFIX": "",
+  "COLLECTION_POSTFIX": ""
 }

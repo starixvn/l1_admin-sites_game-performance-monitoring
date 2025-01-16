@@ -11,17 +11,22 @@ import Error from '@/components/UI/Error';
 
 export default async function HourlySummary() {
   const [data, topGames] = await Promise.all([getData(), getTopGames()]);
+  const today = new Date().toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
 
   return (
-    <PageLayout title="Game Performance Monitor - Hourly Summary">
+    <PageLayout title={`Game Performance Monitor - Hourly Summary (${today})`}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <TopGamesCard
-          title="Top 5 Profit Games"
+          title="Profit Games"
           games={topGames.profits}
           isProfit={true}
         />
         <TopGamesCard
-          title="Top 5 Loss Games"
+          title="Loss Games"
           games={topGames.losses}
           isProfit={false}
         />

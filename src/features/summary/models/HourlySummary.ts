@@ -1,4 +1,4 @@
-import { getCollectionName } from '@/utils/db';
+import { useDB, getCollectionName } from '@/utils/db';
 import { Schema, model, models } from 'mongoose';
 
 export interface HourlySummary {
@@ -73,5 +73,10 @@ const hourlySummarySchema = new Schema<HourlySummary>(
   }
 );
 
-export const HourlySummary =
-  models.HourlySummary || model('HourlySummary', hourlySummarySchema);
+export function getHourlySummaryModel() {
+  const db = useDB('summary');
+  return (
+    db.models.HourlySummary ||
+    db.model<HourlySummary>('HourlySummary', hourlySummarySchema)
+  );
+}
