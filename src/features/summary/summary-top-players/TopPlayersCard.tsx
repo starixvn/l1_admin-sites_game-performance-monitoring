@@ -17,7 +17,7 @@ export default function TopPlayersCard({ players, date }: TopPlayersCardProps) {
       <div className="px-4 py-5 sm:p-6">
         <h3 className="text-lg font-medium leading-6 text-gray-900 mb-4 flex items-center gap-2">
           <FaCrown className="text-yellow-500" />
-          Top 10 Winning Players
+          Top 10 Players by House Loss
         </h3>
         {players.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -40,8 +40,10 @@ export default function TopPlayersCard({ players, date }: TopPlayersCardProps) {
                     <div className="text-sm text-gray-500">
                       Stake: {formatCurrency(player.stake)}
                     </div>
-                    <div className="text-sm text-green-600">
-                      Win/Loss: {formatWinLoss(player.winloss)}
+                    <div
+                      className={`text-sm ${player.winloss < 0 ? 'text-red-600' : 'text-green-600'}`}
+                    >
+                      House P/L: {formatWinLoss(player.winloss)}
                     </div>
                   </div>
                 </div>

@@ -155,10 +155,11 @@ export abstract class SummaryService implements BaseSummaryService {
               _id: '$playerId',
               playerId: { $first: '$playerId' },
               stake: { $sum: '$USD.stake' },
-              winloss: { $sum: '$USD.winloss' },
+              // Invert winloss for house perspective
+              winloss: { $sum: { $multiply: ['$USD.winloss', -1] } },
             },
           },
-          { $sort: { winloss: -1 } },
+          { $sort: { winloss: 1 } },
           { $limit: 10 },
         ])
         .exec();
