@@ -7,7 +7,6 @@ import {
 import SummaryTable from '@/features/summary/summary-list/Table';
 import TopGamesCard from '@/features/summary/summary-top-game/TopGamesCard';
 import Loading from '@/components/UI/Loading';
-import Error from '@/components/UI/Error';
 import TimeSelector from '@/features/summary/components/TimeSelector';
 
 interface PageProps {
@@ -16,7 +15,6 @@ interface PageProps {
 
 export default async function HourlySummary({ searchParams }: PageProps) {
   const now = new Date();
-  // Get time from URL or default to current time
   const currentDate = searchParams.time
     ? new Date(searchParams.time)
     : new Date(now.setMinutes(0, 0, 0));
@@ -57,7 +55,9 @@ export default async function HourlySummary({ searchParams }: PageProps) {
             {data.length > 0 ? (
               <SummaryTable initialData={data} showHour={true} />
             ) : (
-              <Error message="Failed to load data" />
+              <div className="text-center py-8 text-gray-500">
+                No data available for this time period
+              </div>
             )}
           </Suspense>
         </div>

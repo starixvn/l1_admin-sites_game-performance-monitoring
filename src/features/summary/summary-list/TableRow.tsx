@@ -1,4 +1,4 @@
-import { formatCurrency, formatWinLoss } from '@/utils/format';
+import { formatCurrency, formatToGMT7, formatWinLoss } from '@/utils/format';
 
 interface TableRowProps {
   summary: {
@@ -17,9 +17,7 @@ export default function TableRow({ summary, showHour }: TableRowProps) {
   // Format date to YYYY-MM-DD or YYYY-MM-DD HH:00 if showHour is true
   const formatDate = (date: string) => {
     const d = new Date(date);
-    return showHour
-      ? d.toISOString().split('.')[0].replace('T', ' ').slice(0, -3)
-      : d.toISOString().split('T')[0];
+    return showHour ? formatToGMT7(d) : d.toISOString().split('T')[0];
   };
 
   return (
