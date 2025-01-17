@@ -15,7 +15,7 @@ class DailySummaryService extends SummaryService {
   async getTopGames(date?: string) {
     const queryDate = date ? new Date(date) : new Date();
     const query = { time: queryDate };
-    return super.getTopGames(query);
+    return super.getTopGames(query, 5);
   }
 
   async getTopPlayers(date?: string) {

@@ -52,7 +52,7 @@ export abstract class SummaryService implements BaseSummaryService {
     }
   }
 
-  async getTopGames(query = {}) {
+  async getTopGames(query = {}, limit?: number) {
     try {
       await connectDB();
       const [allWinLosses] = await Promise.all([
@@ -86,7 +86,8 @@ export abstract class SummaryService implements BaseSummaryService {
           ...game,
           winloss: -1 * game.winloss,
           gameName: gameNames[game.gameId] || `Game ${game.gameId}`,
-        }));
+        }))
+        .slice(0, limit);
 
       const losses = allWinLosses
         .filter((game: WinLossData) => game.winloss > 0)
@@ -95,7 +96,8 @@ export abstract class SummaryService implements BaseSummaryService {
           ...game,
           winloss: -1 * game.winloss,
           gameName: gameNames[game.gameId] || `Game ${game.gameId}`,
-        }));
+        }))
+        .slice(0, limit);
 
       return {
         profits: profits.length ? JSON.parse(JSON.stringify(profits)) : [],
