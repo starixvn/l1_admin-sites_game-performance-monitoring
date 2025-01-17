@@ -12,6 +12,7 @@ export interface GameStatistics {
   winloss: number;
   tickets: number;
   averageStake: number;
+  players: number;
 }
 
 class GameStatisticsService {
@@ -34,6 +35,7 @@ class GameStatisticsService {
         winloss: 0,
         tickets: 0,
         averageStake: 0,
+        players: 0,
       };
     }
 
@@ -42,9 +44,10 @@ class GameStatisticsService {
       time: result.time,
       stake: result.USD?.stake || 0,
       payout: result.USD?.payout || 0,
-      winloss: result.USD?.winloss || 0,
+      winloss: -result.USD?.winloss || 0,
       tickets: result.tickets,
       averageStake: result.tickets > 0 ? result.USD?.stake / result.tickets : 0,
+      players: result.players || 0,
     };
   }
 }

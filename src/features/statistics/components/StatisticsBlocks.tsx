@@ -21,7 +21,7 @@ const Block = ({ label, value, className = '' }: BlockProps) => (
 export default function StatisticsBlocks({
   statistics,
 }: StatisticsBlocksProps) {
-  const { stake, payout, winloss, tickets, averageStake } = statistics;
+  const { stake, payout, winloss, tickets, averageStake, players } = statistics;
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -32,7 +32,8 @@ export default function StatisticsBlocks({
         value={formatWinLoss(winloss)}
         className={winloss >= 0 ? 'text-green-600' : 'text-red-600'}
       />
-      <Block label="Total Tickets" value={tickets.toString()} />
+      <Block label="Total Players" value={players.toLocaleString()} />
+      <Block label="Total Tickets" value={tickets.toLocaleString()} />
       <Block
         label="Average Stake per Ticket"
         value={formatCurrency(averageStake)}
