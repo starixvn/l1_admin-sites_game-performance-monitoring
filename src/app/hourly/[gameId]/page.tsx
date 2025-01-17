@@ -11,7 +11,10 @@ import TimeSelector from '@/features/summary/components/TimeSelector';
 
 interface PageProps {
   params: { gameId: string };
-  searchParams: { time?: string };
+  searchParams: {
+    time?: string;
+    gameName?: string;
+  };
 }
 
 export default async function GameStatistics({
@@ -23,13 +26,24 @@ export default async function GameStatistics({
     ? new Date(searchParams.time)
     : new Date(now.setMinutes(0, 0, 0));
 
+  const gameName = searchParams.gameName
+    ? decodeURIComponent(searchParams.gameName)
+    : `Game ${params.gameId}`;
+
   const [statistics, topPlayers] = await Promise.all([
     getGameStatistics(parseInt(params.gameId), currentDate),
     getTopPlayers(parseInt(params.gameId), currentDate),
   ]);
 
+  const formattedDate = currentDate.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+  });
+
   return (
-    <PageLayout title={`Game ${params.gameId} Statistics`}>
+    <PageLayout title={`${gameName} - ${formattedDate}`}>
       <div className="mb-6">
         <TimeSelector defaultDate={currentDate} />
       </div>

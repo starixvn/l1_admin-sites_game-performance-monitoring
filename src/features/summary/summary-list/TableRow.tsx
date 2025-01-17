@@ -7,8 +7,8 @@ import { formatCurrency, formatToGMT7, formatWinLoss } from '@/utils/format';
 interface TableRowProps {
   summary: {
     gameId: number;
-    time: string;
     gameName: string;
+    time: string;
     currency: string;
     stake: number;
     payout: number;
@@ -24,7 +24,9 @@ export default function TableRow({ summary, showHour }: TableRowProps) {
 
   const handleClick = () => {
     setIsLoading(true);
-    router.push(`/hourly/${summary.gameId}${window.location.search}`);
+    const params = new URLSearchParams(window.location.search);
+    params.set('gameName', encodeURIComponent(summary.gameName));
+    router.push(`/hourly/${summary.gameId}?${params.toString()}`);
   };
 
   // Format date to YYYY-MM-DD or YYYY-MM-DD HH:00 if showHour is true
