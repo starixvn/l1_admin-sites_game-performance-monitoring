@@ -1,7 +1,11 @@
 import { Suspense } from 'react';
 import PageLayout from '@/components/Layout/PageLayout';
-import { getGameStatistics } from '@/features/statistics/services/gameStatistics';
+import {
+  getGameStatistics,
+  getTopPlayers,
+} from '@/features/statistics/services/gameStatistics';
 import StatisticsBlocks from '@/features/statistics/components/StatisticsBlocks';
+import TopPlayersCard from '@/features/summary/summary-top-players/TopPlayersCard';
 import Loading from '@/components/UI/Loading';
 import TimeSelector from '@/features/summary/components/TimeSelector';
 
@@ -19,10 +23,10 @@ export default async function GameStatistics({
     ? new Date(searchParams.time)
     : new Date(now.setMinutes(0, 0, 0));
 
-  const statistics = await getGameStatistics(
-    parseInt(params.gameId),
-    currentDate
-  );
+  const [statistics, topPlayers] = await Promise.all([
+    getGameStatistics(parseInt(params.gameId), currentDate),
+    getTopPlayers(parseInt(params.gameId), currentDate),
+  ]);
 
   return (
     <PageLayout title={`Game ${params.gameId} Statistics`}>
@@ -31,7 +35,14 @@ export default async function GameStatistics({
       </div>
 
       <Suspense fallback={<Loading />}>
-        <StatisticsBlocks statistics={statistics} />
+        <div className="space-y-6">
+          <StatisticsBlocks statistics={statistics} />
+
+          <TopPlayersCard
+            players={topPlayers}
+            date={currentDate.toISOString()}
+          />
+        </div>
       </Suspense>
     </PageLayout>
   );
