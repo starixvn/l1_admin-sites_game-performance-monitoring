@@ -1,7 +1,12 @@
+'use client';
+
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { formatCurrency, formatToGMT7, formatWinLoss } from '@/utils/format';
 
 interface TableRowProps {
   summary: {
+    gameId: number;
     time: string;
     gameName: string;
     currency: string;
@@ -14,6 +19,14 @@ interface TableRowProps {
 }
 
 export default function TableRow({ summary, showHour }: TableRowProps) {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleClick = () => {
+    setIsLoading(true);
+    router.push(`/hourly/${summary.gameId}${window.location.search}`);
+  };
+
   // Format date to YYYY-MM-DD or YYYY-MM-DD HH:00 if showHour is true
   const formatDate = (date: string) => {
     const d = new Date(date);
@@ -21,7 +34,13 @@ export default function TableRow({ summary, showHour }: TableRowProps) {
   };
 
   return (
-    <tr className="hover:bg-gray-50">
+    <tr
+      onClick={handleClick}
+      className={`
+        hover:bg-gray-50 cursor-pointer transition-colors
+        ${isLoading ? 'opacity-50' : ''}
+      `}
+    >
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
         {formatDate(summary.time)}
       </td>

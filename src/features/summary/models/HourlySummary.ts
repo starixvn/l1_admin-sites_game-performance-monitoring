@@ -1,10 +1,10 @@
 import { useDB, getCollectionName } from '@/utils/db';
-import { Schema, model, models } from 'mongoose';
+import { Schema } from 'mongoose';
 
 export interface HourlySummary {
   _id: string;
   time: Date;
-  gameId: string;
+  gameId: number;
   currency: string;
   stake: number;
   payout: number;
@@ -38,7 +38,7 @@ export interface HourlySummary {
 const hourlySummarySchema = new Schema<HourlySummary>(
   {
     time: { type: Date, required: true },
-    gameId: { type: String, required: true },
+    gameId: { type: Number, required: true },
     currency: { type: String, required: true },
     stake: { type: Number, required: true },
     payout: { type: Number, required: true },
@@ -75,8 +75,9 @@ const hourlySummarySchema = new Schema<HourlySummary>(
 
 export function getHourlySummaryModel() {
   const db = useDB('summary');
+
   return (
     db.models.HourlySummary ||
-    db.model<HourlySummary>('HourlySummary', hourlySummarySchema)
+    db.model('HourlySummary', hourlySummarySchema, 'hourly_summaries')
   );
 }
