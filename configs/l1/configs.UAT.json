@@ -1,0 +1,7 @@
+{
+  "MONGODB_URI": "mongodb://svc_readonly:SvcReadonly%4022027@10.99.99.53:39120,10.99.99.54:39120,10.99.99.188:39120,10.99.99.187:39120/?replicaSet=SabaUAT&readPreference=secondary&appname=gameperf",
+  "ADMIN_USER": "admin",
+  "ADMIN_PASSWORD": "JDJhJDEwJDlPaFF2TGY3bDJIVThMOW4uMTZJTmVCVFg3ZE9pVkFDbWR1ME04dHkyTXMuM3I0em8yRVdD",
+  "DB_POSTFIX": "",
+  "COLLECTION_POSTFIX": ""
+}
