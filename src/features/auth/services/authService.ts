@@ -11,7 +11,7 @@ export class AuthService {
   static async login(credentials: AuthCredentials): Promise<boolean> {
     try {
       const validUsername = config.ADMIN_USER;
-      const encodedPasswordHash = config.NEXT_PUBLIC_ADMIN_PASSWORD;
+      const encodedPasswordHash = config.ADMIN_PASSWORD;
 
       if (!validUsername || !encodedPasswordHash) {
         throw new Error('Authentication configuration missing');
